@@ -3,6 +3,11 @@
 #
 # NOTE: hard-coded for Debian Firefox flatpak install
 #
+# WebDriver is configured to run on a Selenium Grid:
+# :remote - execute tests remotely
+# options: - can be used to specify
+#   the required test properties (browser name, version, platform)
+#
 
 require "selenium-webdriver"
 options = Selenium::WebDriver::Firefox::Options.new
@@ -16,7 +21,16 @@ describe "Blog application" do
   describe "Signup to the blog application" do
     timestamp = Time.now.to_i # randomize the username for a unique user signup
     it "Confirm that a user can successfully sign up" do
+      # Use :remote and options:: for remote execution on the Grid
+      options = Selenium::WebDriver::Firefox::Options.new
+      options.binary = "/var/lib/flatpak/app/org.mozilla.firefox/current/active/files/bin/firefox"
+
+      # grid tests
+      #driver = Selenium::WebDriver.for :remote, url: "http://localhost:4444/wd/hub", options: options
+
+      # local tests
       driver = Selenium::WebDriver.for :firefox, options: options
+
       driver.get 'https://selenium-blog.herokuapp.com/signup'
 
       username_field = driver.find_element(id: "user_username")

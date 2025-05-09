@@ -1,0 +1,39 @@
+# rspec blog-test.rb
+# bundle exec rspec blog-test.rb
+require "selenium-webdriver"
+options = Selenium::WebDriver::Firefox::Options.new
+# For flatpak (ugh!)...
+options.binary = "/var/lib/flatpak/app/org.mozilla.firefox/current/active/files/bin/firefox"
+
+require "rspec"
+
+# TEST: Sign up for a blog
+describe "Blog application" do
+  describe "Signup to the blog application" do
+    userid = "caj3"
+    it "Confirm that a user can successfully sign up" do
+      driver = Selenium::WebDriver.for :firefox, options: options
+      driver.get 'https://selenium-blog.herokuapp.com/signup'
+
+      username_field = driver.find_element(id: "user_username")
+      username_field.send_keys(userid)
+
+      email_field = driver.find_element(id: "user_email")
+      email_field.send_keys("#{userid}@nothere.com")
+
+      password_field = driver.find_element(id: "user_password")
+      password_field.send_keys("insecure")
+
+      # Submit
+      submit_button = driver.find_element(id: "submit")
+      submit_button.click
+
+      # Verify user was added successfully by checking for success banner text
+      banner = driver.find_element(id: "flash_success")
+      banner_text = banner.text
+      expect(banner_text).to eq("Welcome to the alpha blog #{userid}")
+
+      driver.quit
+    end # it
+  end # test
+end # describe

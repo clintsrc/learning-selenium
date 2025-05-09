@@ -1,5 +1,9 @@
-# rspec blog-test.rb
-# bundle exec rspec blog-test.rb
+# Install packages: bundle install
+# Execute test: rspec blog-test.rb
+#
+# NOTE: hard-coded for Debian Firefox flatpak install
+#
+
 require "selenium-webdriver"
 options = Selenium::WebDriver::Firefox::Options.new
 # For flatpak (ugh!)...
